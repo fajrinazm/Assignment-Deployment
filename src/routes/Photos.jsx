@@ -17,15 +17,17 @@ const Photos = () => {
     })
       .then((res) => res.json())
       .then(() => {
-       const result = photos.filter(photos => photos.id != id);
-       setPhotos(result)
+        const result = photos.filter((photos) => photos.id !== id);
+        setPhotos(result);
       });
   };
 
   useEffect(() => {
     setLoading(true);
     // TODO: answer here
-    fetch(`https://gallery-app-server.vercel.app/photos?_sort=id&_order=${sort}`)
+    fetch(
+      `https://gallery-app-server.vercel.app/photos?_sort=id&_order=${sort}&q=${submited}`
+    )
       .then((res) => res.json())
       .then((dat) => {
         setPhotos(dat);
@@ -35,19 +37,6 @@ const Photos = () => {
       .catch((error) => {
         setError(error);
       });
-    if (search) {
-      fetch(`https://gallery-app-server.vercel.app/photos?q=${search}`)
-        .then((res) => res.json())
-        .then((dat) => {
-          setPhotos(dat);
-          setLoading(false);
-          setError(null);
-        })
-        .catch((error) => {
-          setLoading(false);
-          setError(error);
-        });
-    }
   }, [sort, submited]);
 
   useEffect(() => {
@@ -65,7 +54,12 @@ const Photos = () => {
       });
   }, []);
 
-  if (error) return <h1 style={{ width: "100%", textAlign: "center", marginTop: "20px" }} >Error!</h1>;
+  if (error)
+    return (
+      <h1 style={{ width: "100%", textAlign: "center", marginTop: "20px" }}>
+        Error!
+      </h1>
+    );
 
   return (
     <>
